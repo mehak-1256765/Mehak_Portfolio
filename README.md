@@ -67,7 +67,6 @@ src/
 ## 📬 Contact
 
 - **Email** — mehakmanhas19@gmail.com
-- **WhatsApp** — +91 6280309346
 - **GitHub** — [github.com/mehak-1256765](https://github.com/mehak-1256765)
 - **LinkedIn** — [linkedin.com/in/mehak-thakur-8594791aa](https://linkedin.com/in/mehak-thakur-8594791aa)
 
