@@ -1,0 +1,127 @@
+import { useRef } from 'react'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { Mail, Phone, Github, Linkedin, ArrowUpRight } from 'lucide-react'
+
+const LINKS = [
+  { icon: Mail,     label: 'Email',    value: 'mehakmanhas19@gmail.com', href: 'mailto:mehakmanhas19@gmail.com' },
+  { icon: Phone,    label: 'Phone',    value: '+91 6280309346',          href: 'tel:+916280309346' },
+  { icon: Github,   label: 'GitHub',   value: 'github.com/mehak-1256765', href: 'https://github.com/mehak-1256765' },
+  { icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com/in/mehak-thakur-8594791aa', href: 'https://linkedin.com/in/mehak-thakur-8594791aa' },
+]
+
+const WORDS = ["Let's", 'Build', 'Something', 'Together.']
+
+export default function ContactSection() {
+  const sectionRef = useRef(null)
+  const ref        = useRef(null)
+  const inView     = useInView(ref, { once: true, margin: '-100px' })
+
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
+  const bgY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
+
+  return (
+    <section id="contact" ref={sectionRef} className="relative overflow-hidden">
+      {/* Thin base overlay — just enough for text legibility */}
+      <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.45)' }} />
+
+      {/* Parallax video bg */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: bgY }}>
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
+          muted autoPlay loop playsInline preload="auto"
+          className="w-full h-full object-cover opacity-[0.40]"
+        />
+      </motion.div>
+
+      <div ref={ref} className="relative z-10 max-w-5xl mx-auto px-6 pt-28 md:pt-40 pb-20">
+
+        {/* Chapter label */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-white/50 text-xs tracking-[0.35em] uppercase mb-8"
+        >
+          06 — Get In Touch
+        </motion.p>
+
+        {/* Heading */}
+        <div className="mb-14 md:mb-20 overflow-hidden">
+          <h2 className="serif text-white tracking-tight leading-none"
+            style={{ fontSize: 'clamp(3rem,9vw,7rem)' }}>
+            {WORDS.map((word, i) => (
+              <motion.span
+                key={i}
+                className={`inline-block mr-[0.18em] ${i >= 2 ? 'text-white/60 italic' : 'text-white'}`}
+                initial={{ y: 80, opacity: 0 }}
+                animate={inView ? { y: 0, opacity: 1 } : {}}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.1 + i * 0.1 }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </h2>
+        </div>
+
+        {/* Contact cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+          {LINKS.map(({ icon: Icon, label, value, href }, i) => (
+            <motion.a
+              key={label} href={href} target="_blank" rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.65, delay: 0.4 + i * 0.1 }}
+              whileHover={{ y: -5, scale: 1.01 }}
+              className="group flex items-center justify-between p-6 rounded-2xl transition-colors"
+              style={{
+                background: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                backdropFilter: 'blur(12px)',
+              }}
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className="rounded-xl p-3 text-white/70 group-hover:text-white transition-colors"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}
+                >
+                  <Icon size={18} />
+                </div>
+                <div>
+                  <p className="text-white/50 text-xs tracking-widest uppercase mb-1">{label}</p>
+                  <p className="text-white/85 text-sm group-hover:text-white transition-colors font-medium">{value}</p>
+                </div>
+              </div>
+              <ArrowUpRight size={16} className="text-white/40 group-hover:text-white transition-colors flex-shrink-0" />
+            </motion.a>
+          ))}
+        </div>
+
+        {/* CTA row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.85 }}
+          className="flex flex-col md:flex-row gap-4 items-start md:items-center"
+        >
+          <motion.a
+            href="https://wa.me/916280309346?text=Hi%20Mehak%2C%20I%27d%20love%20to%20start%20a%20conversation!"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.96 }}
+            className="text-center bg-white text-black rounded-full px-10 py-4 text-sm font-semibold"
+          >
+            Start a Conversation
+          </motion.a>
+          <p className="text-white/65 text-sm">
+            Open to Bangalore · Remote · Germany · UK · EU
+          </p>
+        </motion.div>
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10 border-t border-white/10 py-8 text-center">
+        <p className="text-white/45 text-xs tracking-widest">
+          Designed &amp; Built by <span className="text-white/70 font-medium">Mehak Manhas</span> · 2026
+        </p>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: auto; } /* Lenis handles smoothness */
+  * { cursor: none !important; }
+  body { background: #000; overflow-x: hidden; }
+}
+
+@layer components {
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0)    40%,
+      rgba(255, 255, 255, 0)    60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .serif { font-family: 'Instrument Serif', serif; }
+
+  .fluid-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.22;
+    will-change: transform;
+  }
+
+  .section-layer {
+    background: rgba(0, 0, 0, 0.48);
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+}
+
+/* ── Fluid blob keyframes ── */
+@keyframes blob1 {
+  0%, 100% { transform: translate(0%,  0%) scale(1);    }
+  25%       { transform: translate(5%, -8%) scale(1.06); }
+  50%       { transform: translate(-4%, 6%) scale(0.94); }
+  75%       { transform: translate(7%,  3%) scale(1.03); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate(0%,   0%) scale(1);    }
+  33%       { transform: translate(-7%,  6%) scale(1.08); }
+  66%       { transform: translate(5%,  -4%) scale(0.93); }
+}
+@keyframes blob3 {
+  0%, 100% { transform: translate(0%,   0%) scale(1);    }
+  40%       { transform: translate(4%,  10%) scale(1.05); }
+  80%       { transform: translate(-5%, -7%) scale(0.96); }
+}
+@keyframes blob4 {
+  0%, 100% { transform: translate(0%,  0%) scale(1);    }
+  50%       { transform: translate(-8%, 4%) scale(1.1);  }
+}
+
+/* ── Ticker ── */
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.ticker { animation: ticker 28s linear infinite; }
+
+/* ── Pulse dot ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.5; transform: scale(1);   }
+  50%       { opacity: 1;   transform: scale(1.35); }
+}
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+/* ── Section animation hints ── */
+section { will-change: transform; }
+
+/* ── Grain noise overlay ── */
+.fluid-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  pointer-events: none;
+}
