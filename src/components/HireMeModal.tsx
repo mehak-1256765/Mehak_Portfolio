@@ -134,7 +134,7 @@ export default function HireMeModal({
               </motion.div>
 
               {/* Headline */}
-              <div className="overflow-hidden mb-4">
+              <div className="overflow-hidden pb-2 mb-4">
                 <motion.h2
                   initial={{ y: 80, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -181,7 +181,7 @@ export default function HireMeModal({
                 className="flex items-center gap-1.5 text-white/45 text-xs mb-5"
               >
                 <MapPin size={11} />
-                <span>India · Remote · Open to Relocation (DE · UK · EU)</span>
+                <span>Bangalore · Chandigarh · Pune · Remote · Open to Relocation (DE · UK · EU)</span>
               </motion.div>
 
               {/* Divider */}

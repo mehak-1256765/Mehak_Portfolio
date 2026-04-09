@@ -64,7 +64,7 @@ export function ClipReveal({ children, delay = 0, className = '', style }: Props
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
   return (
-    <div ref={ref} className={`overflow-hidden ${className}`} style={style}>
+    <div ref={ref} className={`overflow-hidden pb-2 ${className}`} style={style}>
       <motion.div
         initial={{ y: '105%' }}
         animate={inView ? { y: '0%' } : {}}

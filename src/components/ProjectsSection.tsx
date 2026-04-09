@@ -1,25 +1,28 @@
 import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, LucideIcon } from 'lucide-react'
 import { FlyUp, ClipReveal, FadeIn } from './Animate'
 
-const PROJECTS = [
-  { title: 'OneUp Hosting',    sub: 'Modern Hosting Website',     icon: '🌐', color: '#6366f1',
+const PROJECTS: {
+  title: string; sub: string; icon: LucideIcon; color: string
+  desc: string; tech: string[]; tags: string[]; url: string | null
+}[] = [
+  { title: 'OneUp Hosting',    sub: 'Modern Hosting Website',    icon: Globe,        color: '#6366f1',
     desc: 'Full frontend for a production hosting platform — domain search, 3D visuals, animated checkout.',
     tech: ['React.js','Three.js','Tailwind','Framer Motion'], tags: ['SEO 75→100%','Perf 70→90%'], url: 'https://oneup-hosting.com/' },
-  { title: 'SpecArs',          sub: 'Car Modification Platform',  icon: '🏎️', color: '#fb7185',
+  { title: 'SpecArs',          sub: 'Car Modification Platform', icon: Car,          color: '#fb7185',
     desc: 'Real-time Firebase inventory, config builder, and smooth UI animations for a car mod platform.',
     tech: ['React.js','Firebase','Tailwind','Vite'], tags: ['Real-time DB','Custom Config'], url: 'https://specarts.vercel.app/' },
-  { title: 'GALAXO',           sub: 'Galaxy Learning Web App',    icon: '🌌', color: '#22d3ee',
+  { title: 'GALAXO',           sub: 'Galaxy Learning Web App',   icon: Sparkles,     color: '#22d3ee',
     desc: 'Space ed-tech with animated 3D models, galaxy backgrounds, and educational content.',
     tech: ['React.js','Three.js','GSAP','Tailwind'], tags: ['3D Models','Scroll Animations'], url: 'https://galaxo.vercel.app/' },
-  { title: 'Sales Automation', sub: 'n8n Workflow Engine',        icon: '⚡', color: '#fb923c',
+  { title: 'Sales Automation', sub: 'n8n Workflow Engine',       icon: Zap,          color: '#fb923c',
     desc: 'End-to-end salesperson automation — email outreach, risk alerts, AI-powered insights.',
     tech: ['n8n','REST APIs','AI/LLM Nodes','Email'], tags: ['60% Less Manual','AI Insights'], url: null },
-  { title: 'Retail Analytics', sub: 'Decision-Support Platform', icon: '📊', color: '#34d399',
+  { title: 'Retail Analytics', sub: 'Decision-Support Platform', icon: BarChart2,    color: '#34d399',
     desc: 'Inventory tracking, sales forecasting & segmentation with automated recommendations.',
     tech: ['React.js','Python','FastAPI'], tags: ['Auto Recs','Festival Alerts'], url: null },
-  { title: 'OptBinning',       sub: 'ML Data Engineering',        icon: '🔬', color: '#fbbf24',
+  { title: 'OptBinning',       sub: 'ML Data Engineering',       icon: FlaskConical, color: '#fbbf24',
     desc: 'ML pipelines with OptBinning integration — interactive binning visualisations & scorecards.',
     tech: ['Python','FastAPI','React.js','Pandas'], tags: ['ML Pipeline','Scorecards'], url: null },
 ]
@@ -69,9 +72,9 @@ function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
 
       <div className="relative z-10 flex flex-col flex-1">
         <div className="flex items-start justify-between mb-5">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
             style={{ background: `${p.color}14`, border: `1px solid ${p.color}22` }}>
-            {p.icon}
+            <p.icon size={22} style={{ color: p.color }} strokeWidth={1.5} />
           </div>
           {p.url ? (
             <motion.a href={p.url} target="_blank" rel="noopener noreferrer"

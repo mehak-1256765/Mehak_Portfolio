@@ -45,7 +45,7 @@ export default function ContactSection() {
         </motion.p>
 
         {/* Heading */}
-        <div className="mb-14 md:mb-20 overflow-hidden">
+        <div className="mb-14 md:mb-20 overflow-hidden pb-3">
           <h2 className="serif text-white tracking-tight leading-none"
             style={{ fontSize: 'clamp(3rem,9vw,7rem)' }}>
             {WORDS.map((word, i) => (
@@ -111,7 +111,7 @@ export default function ContactSection() {
             Start a Conversation
           </motion.a>
           <p className="text-white/65 text-sm">
-            Open to Bangalore · Remote · Germany · UK · EU
+            Open to &nbsp;Chandigarh &nbsp;·&nbsp; Bangalore &nbsp;·&nbsp; Pune &nbsp;·&nbsp; Remote &nbsp;·&nbsp; Germany &nbsp;·&nbsp; UK &nbsp;·&nbsp; EU
           </p>
         </motion.div>
       </div>
@@ -119,7 +119,7 @@ export default function ContactSection() {
       {/* Footer */}
       <div className="relative z-10 border-t border-white/10 py-8 text-center">
         <p className="text-white/45 text-xs tracking-widest">
-          Designed &amp; Built by <span className="text-white/70 font-medium">Mehak Manhas</span> · 2026
+          Designed &amp; Built by <span className="text-white/70 font-medium">Mehak</span> · 2026
         </p>
       </div>
     </section>
