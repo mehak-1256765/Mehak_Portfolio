@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, Lock, LucideIcon } from 'lucide-react'
 import { FlyUp, ClipReveal, FadeIn } from './Animate'
 
 const PROJECTS: {
@@ -44,69 +44,60 @@ function VideoModal({ src, title, onClose }: { src: string; title: string; onClo
   }, [onClose])
 
   return (
-    <AnimatePresence>
+    <motion.div
+      className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-10"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+    >
       <motion.div
-        className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="absolute inset-0"
+        style={{ background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}
+        onClick={onClose}
+      />
+      <motion.div
+        className="relative z-10 w-full max-w-4xl"
+        initial={{ scale: 0.88, opacity: 0, y: 40 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.88, opacity: 0, y: 40 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+        onClick={e => e.stopPropagation()}
       >
-        {/* Backdrop */}
-        <motion.div
-          className="absolute inset-0"
-          style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
-          onClick={onClose}
-        />
-
-        {/* Modal */}
-        <motion.div
-          className="relative z-10 w-full max-w-4xl"
-          initial={{ scale: 0.88, opacity: 0, y: 40 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.88, opacity: 0, y: 40 }}
-          transition={{ type: 'spring', stiffness: 240, damping: 26 }}
-          onClick={e => e.stopPropagation()}
-        >
-          {/* Title bar */}
-          <div className="flex items-center justify-between mb-3 px-1">
-            <p className="text-white/60 text-sm tracking-wide">{title}</p>
-            <motion.button
-              onClick={onClose}
-              whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
-              className="rounded-full p-2 text-white/50 hover:text-white transition-colors"
-              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
-            >
-              <X size={14} />
-            </motion.button>
-          </div>
-
-          {/* Video */}
-          <div className="rounded-2xl overflow-hidden aspect-video"
-            style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 80px rgba(0,0,0,0.6)' }}>
-            <video
-              src={src}
-              className="w-full h-full object-cover"
-              controls
-              autoPlay
-              playsInline
-            />
-          </div>
-        </motion.div>
+        <div className="flex items-center justify-between mb-4 px-1">
+          <p className="text-white/50 text-sm tracking-wide serif italic">{title}</p>
+          <motion.button
+            onClick={onClose}
+            whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
+            className="rounded-full p-2 text-white/50 hover:text-white transition-colors"
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
+          >
+            <X size={14} />
+          </motion.button>
+        </div>
+        <div className="rounded-2xl overflow-hidden aspect-video"
+          style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 80px rgba(0,0,0,0.7)' }}>
+          <video src={src} className="w-full h-full object-cover" controls autoPlay playsInline />
+        </div>
+        <p className="text-center text-white/25 text-xs mt-4 tracking-widest">Press ESC or click outside to close</p>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   )
 }
 
 /* ── Project card ── */
 function ProjectCard({ p, i, onVideoClick }: {
-  p: typeof PROJECTS[0]; i: number; onVideoClick: (video: string, title: string) => void
+  p: typeof PROJECTS[0]
+  i: number
+  onVideoClick: (video: string, title: string) => void
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const col = i % 3
+  const ref    = useRef<HTMLDivElement>(null)
+  const col    = i % 3
+  const num    = String(i + 1).padStart(2, '0')
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center 70%'] })
   const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20, restDelta: 0.001 })
 
-  const xOffset   = col === 0 ? -55 : col === 2 ? 55 : 0
-  const rotateFrom = col === 0 ? -8 : col === 2 ? 8 : 0
+  const xOffset    = col === 0 ? -55 : col === 2 ? 55 : 0
+  const rotateFrom = col === 0 ? -8  : col === 2 ? 8  : 0
 
   const y       = useTransform(smooth, [0, 1], [90, 0])
   const x       = useTransform(smooth, [0, 1], [xOffset, 0])
@@ -114,8 +105,9 @@ function ProjectCard({ p, i, onVideoClick }: {
   const opacity = useTransform(smooth, [0, 0.35, 1], [0, 0.6, 1])
   const scale   = useTransform(smooth, [0, 1], [0.85, 1])
 
-  const hasVideo = !!p.video
   const hasUrl   = !!p.url
+  const hasVideo = !!p.video
+  const isPrivate = !hasUrl && !hasVideo
 
   return (
     <motion.div
@@ -123,72 +115,159 @@ function ProjectCard({ p, i, onVideoClick }: {
       style={{
         y, x, rotate, opacity, scale,
         transformOrigin: col === 0 ? 'left bottom' : col === 2 ? 'right bottom' : 'center bottom',
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        backdropFilter: 'blur(16px)',
       }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      className="rounded-3xl p-7 flex flex-col group relative overflow-hidden"
+      className="group relative rounded-3xl flex flex-col overflow-hidden"
     >
-      {/* Colour glow on hover */}
-      <motion.div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none"
-        style={{ background: `radial-gradient(circle at 30% 30%, ${p.color}18, transparent 70%)` }}
+      {/* Card glass base */}
+      <div
+        className="absolute inset-0 rounded-3xl transition-all duration-500 group-hover:border-white/[0.15]"
+        style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.07)',
+          backdropFilter: 'blur(16px)',
+        }}
       />
 
-      <div className="relative z-10 flex flex-col flex-1">
-        <div className="flex items-start justify-between mb-5">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-            style={{ background: `${p.color}14`, border: `1px solid ${p.color}22` }}>
-            <p.icon size={22} style={{ color: p.color }} strokeWidth={1.5} />
-          </div>
+      {/* Hover colour glow — fills from top-left */}
+      <motion.div
+        className="absolute inset-0 rounded-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: `radial-gradient(ellipse at 20% 20%, ${p.color}22 0%, transparent 65%)` }}
+      />
 
-          {/* Action button — live link / video / private */}
-          {hasUrl && (
-            <motion.a href={p.url!} target="_blank" rel="noopener noreferrer"
-              whileHover={{ scale: 1.15, rotate: 12 }} whileTap={{ scale: 0.9 }}
-              className="rounded-full p-2 text-white/50 hover:text-white transition-colors"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <ArrowUpRight size={15} />
-            </motion.a>
-          )}
-          {!hasUrl && hasVideo && (
-            <motion.button
-              onClick={() => onVideoClick(p.video!, p.title)}
-              whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
-              className="rounded-full p-2 transition-colors"
-              style={{ background: `${p.color}18`, border: `1px solid ${p.color}35`, color: p.color }}
-              title="Watch demo"
-            >
-              <Play size={14} fill="currentColor" />
-            </motion.button>
-          )}
-          {!hasUrl && !hasVideo && (
-            <span className="text-white/20 text-[10px] tracking-widest uppercase">Private</span>
-          )}
+      {/* Animated bottom border on hover */}
+      <div
+        className="absolute bottom-0 left-6 right-6 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
+        style={{ background: `linear-gradient(90deg, transparent, ${p.color}80, transparent)` }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 p-7 flex flex-col flex-1">
+
+        {/* Top row — icon + number */}
+        <div className="flex items-start justify-between mb-6">
+          <motion.div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+            style={{ background: `${p.color}14`, border: `1px solid ${p.color}30` }}
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          >
+            <p.icon size={21} style={{ color: p.color }} strokeWidth={1.5} />
+          </motion.div>
+
+          <span
+            className="serif italic text-white/15 group-hover:text-white/25 transition-colors duration-300"
+            style={{ fontSize: '2rem', lineHeight: 1 }}
+          >
+            {num}
+          </span>
         </div>
 
-        <h3 className="serif text-white text-xl md:text-2xl tracking-tight mb-0.5">{p.title}</h3>
-        <span className="text-xs font-medium mb-4" style={{ color: p.color }}>{p.sub}</span>
-        <p className="text-white/45 text-sm leading-relaxed mb-5 flex-1">{p.desc}</p>
+        {/* Title & subtitle */}
+        <h3 className="serif text-white text-xl md:text-2xl tracking-tight leading-tight mb-1">
+          {p.title}
+        </h3>
+        <span className="text-xs font-medium mb-4 tracking-wide" style={{ color: p.color }}>
+          {p.sub}
+        </span>
 
-        <div className="flex flex-wrap gap-2 mb-3">
+        {/* Description */}
+        <p className="text-white/40 text-sm leading-relaxed mb-6 flex-1">{p.desc}</p>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
           {p.tags.map(t => (
-            <span key={t} className="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-lg uppercase"
-              style={{ background: `${p.color}12`, color: p.color, border: `1px solid ${p.color}20` }}>{t}</span>
+            <span
+              key={t}
+              className="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-lg uppercase"
+              style={{ background: `${p.color}12`, color: p.color, border: `1px solid ${p.color}25` }}
+            >
+              {t}
+            </span>
           ))}
         </div>
-        <div className="flex flex-wrap gap-1.5">
+
+        {/* Tech pills */}
+        <div className="flex flex-wrap gap-1.5 mb-6">
           {p.tech.map(t => (
-            <span key={t} className="text-[10px] px-2 py-0.5 rounded-md text-white/30"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)' }}>{t}</span>
+            <span
+              key={t}
+              className="text-[10px] px-2 py-0.5 rounded-md text-white/25"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+            >
+              {t}
+            </span>
           ))}
         </div>
+
+        {/* ── CTA — always at the bottom, always obvious ── */}
+        {hasUrl && (
+          <motion.a
+            href={p.url!}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center justify-center gap-2 w-full rounded-2xl py-3 text-xs font-semibold tracking-wider uppercase transition-all duration-300"
+            style={{
+              background: `${p.color}15`,
+              border: `1px solid ${p.color}30`,
+              color: p.color,
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.background = `${p.color}25`
+              ;(e.currentTarget as HTMLElement).style.borderColor = `${p.color}60`
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.background = `${p.color}15`
+              ;(e.currentTarget as HTMLElement).style.borderColor = `${p.color}30`
+            }}
+          >
+            View Live <ArrowUpRight size={13} />
+          </motion.a>
+        )}
+
+        {hasVideo && !hasUrl && (
+          <motion.button
+            onClick={() => onVideoClick(p.video!, p.title)}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center justify-center gap-2 w-full rounded-2xl py-3 text-xs font-semibold tracking-wider uppercase transition-all duration-300"
+            style={{
+              background: `${p.color}15`,
+              border: `1px solid ${p.color}30`,
+              color: p.color,
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.background = `${p.color}25`
+              ;(e.currentTarget as HTMLElement).style.borderColor = `${p.color}60`
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.background = `${p.color}15`
+              ;(e.currentTarget as HTMLElement).style.borderColor = `${p.color}30`
+            }}
+          >
+            <Play size={12} fill="currentColor" /> Watch Demo
+          </motion.button>
+        )}
+
+        {isPrivate && (
+          <div
+            className="flex items-center justify-center gap-2 w-full rounded-2xl py-3 text-xs tracking-wider uppercase"
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              color: 'rgba(255,255,255,0.2)',
+            }}
+          >
+            <Lock size={11} /> Private Project
+          </div>
+        )}
       </div>
     </motion.div>
   )
 }
 
+/* ── Section ── */
 export default function ProjectsSection() {
   const sectionRef = useRef(null)
   const ref        = useRef(null)
@@ -203,6 +282,7 @@ export default function ProjectsSection() {
       <div className="absolute inset-0 section-layer" />
 
       <div className="relative z-10 px-6 pt-28 md:pt-40 pb-12 max-w-6xl mx-auto">
+
         {/* Heading */}
         <div ref={ref} className="mb-14">
           <FadeIn>
@@ -216,7 +296,7 @@ export default function ProjectsSection() {
           </ClipReveal>
         </div>
 
-        {/* Featured video banner */}
+        {/* Featured banner */}
         <motion.div
           initial={{ opacity: 0, y: 60, scale: 0.96 }}
           animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
@@ -249,7 +329,7 @@ export default function ProjectsSection() {
           </div>
         </motion.div>
 
-        {/* Project cards */}
+        {/* Cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {PROJECTS.map((p, i) => (
             <ProjectCard
@@ -263,13 +343,15 @@ export default function ProjectsSection() {
       </div>
 
       {/* Video lightbox */}
-      {videoModal && (
-        <VideoModal
-          src={videoModal.src}
-          title={videoModal.title}
-          onClose={() => setVideoModal(null)}
-        />
-      )}
+      <AnimatePresence>
+        {videoModal && (
+          <VideoModal
+            src={videoModal.src}
+            title={videoModal.title}
+            onClose={() => setVideoModal(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   )
 }
