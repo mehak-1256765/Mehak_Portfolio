@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, LucideIcon } from 'lucide-react'
 import { FlyUp, ClipReveal, FadeIn } from './Animate'
 
 const PROJECTS: {
@@ -25,6 +25,12 @@ const PROJECTS: {
   { title: 'OptBinning',       sub: 'ML Data Engineering',       icon: FlaskConical, color: '#fbbf24',
     desc: 'ML pipelines with OptBinning integration — interactive binning visualisations & scorecards.',
     tech: ['Python','FastAPI','React.js','Pandas'], tags: ['ML Pipeline','Scorecards'], url: null },
+  { title: 'AI Daily Digest',  sub: 'n8n Morning Briefing Bot',  icon: Bot,          color: '#f472b6',
+    desc: 'Automated 7 AM email digest — unread Gmail, top news (AI-summarised), calendar events & daily tips. One email. Everything you need.',
+    tech: ['n8n','Mistral AI','Gmail API','Google Calendar','RSS'], tags: ['< $0.01/day','7AM Autopilot'], url: null },
+  { title: 'Data Extraction',  sub: 'Enhanced AI Pipeline',      icon: ScanSearch,   color: '#818cf8',
+    desc: 'Advanced data extraction pipeline with enhanced accuracy, structured output and automated post-processing.',
+    tech: ['Python','FastAPI','LLMs','Pandas'], tags: ['Enhanced Accuracy','Auto Pipeline'], url: null },
 ]
 
 // Per-card scroll-driven animation — the "storytelling fall into place" effect
@@ -130,7 +136,7 @@ export default function ProjectsSection() {
           <ClipReveal delay={0.1}>
             <h2 className="serif text-white tracking-tight leading-none"
               style={{ fontSize: 'clamp(2.8rem,8vw,6rem)' }}>
-              Projects <em className="italic text-white/30 text-[0.5em]">— 6 shipped</em>
+              Projects <em className="italic text-white/30 text-[0.5em]">— 8 shipped</em>
             </h2>
           </ClipReveal>
         </div>
