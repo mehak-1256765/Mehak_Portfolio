@@ -1,11 +1,11 @@
-import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, LucideIcon } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useInView, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
+import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, LucideIcon } from 'lucide-react'
 import { FlyUp, ClipReveal, FadeIn } from './Animate'
 
 const PROJECTS: {
   title: string; sub: string; icon: LucideIcon; color: string
-  desc: string; tech: string[]; tags: string[]; url: string | null
+  desc: string; tech: string[]; tags: string[]; url: string | null; video?: string
 }[] = [
   { title: 'OneUp Hosting',    sub: 'Modern Hosting Website',    icon: Globe,        color: '#6366f1',
     desc: 'Full frontend for a production hosting platform — domain search, 3D visuals, animated checkout.',
@@ -27,28 +27,85 @@ const PROJECTS: {
     tech: ['Python','FastAPI','React.js','Pandas'], tags: ['ML Pipeline','Scorecards'], url: null },
   { title: 'AI Daily Digest',  sub: 'n8n Morning Briefing Bot',  icon: Bot,          color: '#f472b6',
     desc: 'Automated 7 AM email digest — unread Gmail, top news (AI-summarised), calendar events & daily tips. One email. Everything you need.',
-    tech: ['n8n','Mistral AI','Gmail API','Google Calendar','RSS'], tags: ['< $0.01/day','7AM Autopilot'], url: null },
+    tech: ['n8n','Mistral AI','Gmail API','Google Calendar','RSS'], tags: ['< $0.01/day','7AM Autopilot'],
+    url: null, video: '/ai-digest-automation.mp4' },
   { title: 'Data Extraction',  sub: 'Enhanced AI Pipeline',      icon: ScanSearch,   color: '#818cf8',
     desc: 'Advanced data extraction pipeline with enhanced accuracy, structured output and automated post-processing.',
     tech: ['Python','FastAPI','LLMs','Pandas'], tags: ['Enhanced Accuracy','Auto Pipeline'], url: null },
 ]
 
-// Per-card scroll-driven animation — the "storytelling fall into place" effect
-function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
+/* ── Video lightbox ── */
+function VideoModal({ src, title, onClose }: { src: string; title: string; onClose: () => void }) {
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', h)
+    document.body.style.overflow = 'hidden'
+    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = '' }
+  }, [onClose])
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      >
+        {/* Backdrop */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+          onClick={onClose}
+        />
+
+        {/* Modal */}
+        <motion.div
+          className="relative z-10 w-full max-w-4xl"
+          initial={{ scale: 0.88, opacity: 0, y: 40 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.88, opacity: 0, y: 40 }}
+          transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Title bar */}
+          <div className="flex items-center justify-between mb-3 px-1">
+            <p className="text-white/60 text-sm tracking-wide">{title}</p>
+            <motion.button
+              onClick={onClose}
+              whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
+              className="rounded-full p-2 text-white/50 hover:text-white transition-colors"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
+            >
+              <X size={14} />
+            </motion.button>
+          </div>
+
+          {/* Video */}
+          <div className="rounded-2xl overflow-hidden aspect-video"
+            style={{ border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 80px rgba(0,0,0,0.6)' }}>
+            <video
+              src={src}
+              className="w-full h-full object-cover"
+              controls
+              autoPlay
+              playsInline
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
+
+/* ── Project card ── */
+function ProjectCard({ p, i, onVideoClick }: {
+  p: typeof PROJECTS[0]; i: number; onVideoClick: (video: string, title: string) => void
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const col = i % 3
 
-  // Track this card's scroll progress from "just below the fold" → "centred in view"
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'center 70%'],
-  })
-
-  // Spring-smooth the raw scroll value
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'center 70%'] })
   const smooth = useSpring(scrollYProgress, { stiffness: 80, damping: 20, restDelta: 0.001 })
 
-  // Each column flies in from a different angle — left rotates CW, right CCW, centre straight up
-  const xOffset = col === 0 ? -55 : col === 2 ? 55 : 0
+  const xOffset   = col === 0 ? -55 : col === 2 ? 55 : 0
   const rotateFrom = col === 0 ? -8 : col === 2 ? 8 : 0
 
   const y       = useTransform(smooth, [0, 1], [90, 0])
@@ -56,6 +113,9 @@ function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
   const rotate  = useTransform(smooth, [0, 1], [rotateFrom, 0])
   const opacity = useTransform(smooth, [0, 0.35, 1], [0, 0.6, 1])
   const scale   = useTransform(smooth, [0, 1], [0.85, 1])
+
+  const hasVideo = !!p.video
+  const hasUrl   = !!p.url
 
   return (
     <motion.div
@@ -82,14 +142,28 @@ function ProjectCard({ p, i }: { p: typeof PROJECTS[0]; i: number }) {
             style={{ background: `${p.color}14`, border: `1px solid ${p.color}22` }}>
             <p.icon size={22} style={{ color: p.color }} strokeWidth={1.5} />
           </div>
-          {p.url ? (
-            <motion.a href={p.url} target="_blank" rel="noopener noreferrer"
+
+          {/* Action button — live link / video / private */}
+          {hasUrl && (
+            <motion.a href={p.url!} target="_blank" rel="noopener noreferrer"
               whileHover={{ scale: 1.15, rotate: 12 }} whileTap={{ scale: 0.9 }}
               className="rounded-full p-2 text-white/50 hover:text-white transition-colors"
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
               <ArrowUpRight size={15} />
             </motion.a>
-          ) : (
+          )}
+          {!hasUrl && hasVideo && (
+            <motion.button
+              onClick={() => onVideoClick(p.video!, p.title)}
+              whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
+              className="rounded-full p-2 transition-colors"
+              style={{ background: `${p.color}18`, border: `1px solid ${p.color}35`, color: p.color }}
+              title="Watch demo"
+            >
+              <Play size={14} fill="currentColor" />
+            </motion.button>
+          )}
+          {!hasUrl && !hasVideo && (
             <span className="text-white/20 text-[10px] tracking-widest uppercase">Private</span>
           )}
         </div>
@@ -119,6 +193,7 @@ export default function ProjectsSection() {
   const sectionRef = useRef(null)
   const ref        = useRef(null)
   const inView     = useInView(ref, { once: true, margin: '-80px' })
+  const [videoModal, setVideoModal] = useState<{ src: string; title: string } | null>(null)
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const featuredY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
@@ -174,11 +249,27 @@ export default function ProjectsSection() {
           </div>
         </motion.div>
 
-        {/* Project cards — scroll-driven storytelling animation */}
+        {/* Project cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {PROJECTS.map((p, i) => <ProjectCard key={p.title} p={p} i={i} />)}
+          {PROJECTS.map((p, i) => (
+            <ProjectCard
+              key={p.title}
+              p={p}
+              i={i}
+              onVideoClick={(src, title) => setVideoModal({ src, title })}
+            />
+          ))}
         </div>
       </div>
+
+      {/* Video lightbox */}
+      {videoModal && (
+        <VideoModal
+          src={videoModal.src}
+          title={videoModal.title}
+          onClose={() => setVideoModal(null)}
+        />
+      )}
     </section>
   )
 }
