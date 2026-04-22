@@ -9,10 +9,10 @@ const PROJECTS: {
 }[] = [
   { title: 'OneUp Hosting',    sub: 'Modern Hosting Website',    icon: Globe,        color: '#6366f1',
     desc: 'Full frontend for a production hosting platform — domain search, 3D visuals, animated checkout.',
-    tech: ['React.js','Three.js','Tailwind','Framer Motion'], tags: ['SEO 75→100%','Perf 70→90%'], url: 'https://oneup-hosting.com/' },
+    tech: ['React.js','Three.js','Tailwind','Framer Motion'], tags: ['SEO 75→100%','Perf 70→90%','Freelance'], url: 'https://oneup-hosting.com/' },
   { title: 'SpecArs',          sub: 'Car Modification Platform', icon: Car,          color: '#fb7185',
     desc: 'Real-time Firebase inventory, config builder, and smooth UI animations for a car mod platform.',
-    tech: ['React.js','Firebase','Tailwind','Vite'], tags: ['Real-time DB','Custom Config'], url: 'https://specarts.vercel.app/' },
+    tech: ['React.js','Firebase','Tailwind','Vite'], tags: ['Real-time DB','Custom Config','Freelance'], url: 'https://specarts.vercel.app/' },
   { title: 'GALAXO',           sub: 'Galaxy Learning Web App',   icon: Sparkles,     color: '#22d3ee',
     desc: 'Space ed-tech with animated 3D models, galaxy backgrounds, and educational content.',
     tech: ['React.js','Three.js','GSAP','Tailwind'], tags: ['3D Models','Scroll Animations'], url: 'https://galaxo.vercel.app/' },
