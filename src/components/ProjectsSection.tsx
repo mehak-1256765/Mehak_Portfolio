@@ -32,9 +32,9 @@ const PROJECTS: {
   { title: 'OptBinning',       sub: 'ML Data Engineering',       icon: FlaskConical, color: '#fbbf24',
     desc: 'ML pipelines with OptBinning integration — interactive binning visualisations & scorecards.',
     tech: ['Python','FastAPI','React.js','Pandas'], tags: ['ML Pipeline','Scorecards'], url: null },
-  { title: 'Data Extraction',  sub: 'Enhanced AI Pipeline',      icon: ScanSearch,   color: '#818cf8',
-    desc: 'Advanced data extraction pipeline with enhanced accuracy, structured output and automated post-processing.',
-    tech: ['Python','FastAPI','LLMs','Pandas'], tags: ['Enhanced Accuracy','Auto Pipeline'], url: null },
+  { title: 'Data Extraction',  sub: 'Multi-Type Data Extraction', icon: ScanSearch,   color: '#818cf8',
+    desc: 'Enhanced pipeline that extracts multiple types of data — tables, text, numbers, and structured fields — with improved accuracy and clean output.',
+    tech: ['Python','FastAPI','LLMs','Pandas'], tags: ['Multi-Type','Enhanced Accuracy'], url: null },
 ]
 
 /* ── Video lightbox ── */
