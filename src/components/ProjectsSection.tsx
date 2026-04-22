@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, Lock, LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, Lock, Heart, LucideIcon } from 'lucide-react'
 import { FlyUp, ClipReveal, FadeIn } from './Animate'
 
 const PROJECTS: {
@@ -32,6 +32,9 @@ const PROJECTS: {
   { title: 'Data Extraction',  sub: 'Enhanced AI Pipeline',      icon: ScanSearch,   color: '#818cf8',
     desc: 'Advanced data extraction pipeline with enhanced accuracy, structured output and automated post-processing.',
     tech: ['Python','FastAPI','LLMs','Pandas'], tags: ['Enhanced Accuracy','Auto Pipeline'], url: null },
+  { title: 'Moqbilin',         sub: 'Wedding Matchmaking Platform', icon: Heart,       color: '#fb7185',
+    desc: 'Freelance frontend for a wedding matchmaking platform — clean UI, smooth UX, and responsive design built for a client.',
+    tech: ['React.js','Tailwind','Framer Motion','Vite'], tags: ['Freelance','Client Work'], url: 'https://www.moqbilin.com/' },
 ]
 
 /* ── Video lightbox ── */
@@ -291,7 +294,7 @@ export default function ProjectsSection() {
           <ClipReveal delay={0.1}>
             <h2 className="serif text-white tracking-tight leading-none"
               style={{ fontSize: 'clamp(2.8rem,8vw,6rem)' }}>
-              Projects <em className="italic text-white/30 text-[0.5em]">— 8 shipped</em>
+              Projects <em className="italic text-white/30 text-[0.5em]">— 9 shipped</em>
             </h2>
           </ClipReveal>
         </div>
