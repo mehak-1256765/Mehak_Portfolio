@@ -262,7 +262,7 @@ function ProjectCard({ p, i, onVideoClick }: {
               color: 'rgba(255,255,255,0.2)',
             }}
           >
-            <Lock size={11} /> Private Project
+            <Lock size={11} /> Confidential · Company Work
           </div>
         )}
       </div>
