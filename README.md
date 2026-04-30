@@ -37,7 +37,6 @@ I build intelligent, high-performance digital products — from AI-powered appli
 | **GALAXO** | Space ed-tech app with animated 3D models & galaxy backgrounds |
 | **Sales Automation** | End-to-end n8n workflow engine — 60% less manual work, AI-powered insights |
 | **Retail Analytics** | Decision-support platform with inventory tracking & sales forecasting |
-| **OptBinning** | ML pipelines with interactive binning visualisations & scorecards |
 
 ---
 
