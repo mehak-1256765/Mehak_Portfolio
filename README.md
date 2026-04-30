@@ -1,4 +1,4 @@
-# Hi, I'm Mehak Manhas 👋
+# Hi, I'm Mehak 👋
 
 **AI Application Engineer · Full Stack Developer · UI/UX Craftsperson**
 
@@ -42,9 +42,6 @@ I build intelligent, high-performance digital products — from AI-powered appli
 ---
 
 ## 📬 Get In Touch
-
-- **Email** — [mehakmanhas19@gmail.com](mailto:mehakmanhas19@gmail.com)
-- **WhatsApp** — [+91 6280309346](https://wa.me/916280309346)
 - **GitHub** — [github.com/mehak-1256765](https://github.com/mehak-1256765)
 - **LinkedIn** — [linkedin.com/in/mehak-thakur-8594791aa](https://linkedin.com/in/mehak-thakur-8594791aa)
 
