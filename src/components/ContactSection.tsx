@@ -1,6 +1,6 @@
-import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { Mail, Phone, Github, Linkedin, ArrowUpRight } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { Mail, Phone, Github, Linkedin, ArrowUpRight, Send, CheckCircle } from 'lucide-react'
 
 const LINKS = [
   { icon: Mail,     label: 'Email',    value: 'mehakmanhas19@gmail.com', href: 'mailto:mehakmanhas19@gmail.com' },
@@ -11,10 +11,31 @@ const LINKS = [
 
 const WORDS = ["Let's", 'Build', 'Something', 'Together.']
 
+type FormState = { name: string; email: string; message: string }
+type Status = 'idle' | 'sending' | 'sent' | 'error'
+
 export default function ContactSection() {
   const sectionRef = useRef(null)
   const ref        = useRef(null)
   const inView     = useInView(ref, { once: true, margin: '-100px' })
+  const [form, setForm]     = useState<FormState>({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState<Status>('idle')
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setStatus('sending')
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/mehakmanhas19@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ ...form, _captcha: 'false' }),
+      })
+      if (res.ok) { setStatus('sent'); setForm({ name: '', email: '', message: '' }) }
+      else setStatus('error')
+    } catch {
+      setStatus('error')
+    }
+  }
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const bgY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
@@ -41,7 +62,7 @@ export default function ContactSection() {
           transition={{ duration: 0.5 }}
           className="text-white/50 text-xs tracking-[0.35em] uppercase mb-8"
         >
-          06 — Get In Touch
+          07 — Get In Touch
         </motion.p>
 
         {/* Heading */}
@@ -61,6 +82,89 @@ export default function ContactSection() {
             ))}
           </h2>
         </div>
+
+        {/* Contact form */}
+        <motion.form
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="rounded-3xl p-8 md:p-10 mb-8"
+          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(16px)' }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-white/40 text-xs tracking-widest uppercase">Name</label>
+              <input
+                required
+                type="text"
+                placeholder="Your name"
+                value={form.name}
+                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                className="rounded-xl px-4 py-3 text-white text-sm outline-none placeholder:text-white/20 transition-colors"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
+                onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-white/40 text-xs tracking-widest uppercase">Email</label>
+              <input
+                required
+                type="email"
+                placeholder="your@email.com"
+                value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                className="rounded-xl px-4 py-3 text-white text-sm outline-none placeholder:text-white/20 transition-colors"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
+                onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 mb-6">
+            <label className="text-white/40 text-xs tracking-widest uppercase">Message</label>
+            <textarea
+              required
+              rows={4}
+              placeholder="Tell me about your project..."
+              value={form.message}
+              onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+              className="rounded-xl px-4 py-3 text-white text-sm outline-none placeholder:text-white/20 resize-none transition-colors"
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+              onFocus={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)')}
+              onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <motion.button
+              type="submit"
+              disabled={status === 'sending' || status === 'sent'}
+              whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 bg-white text-black rounded-full px-8 py-3 text-sm font-semibold disabled:opacity-50"
+            >
+              {status === 'sending' ? 'Sending…' : <><Send size={14} /> Send Message</>}
+            </motion.button>
+            <AnimatePresence>
+              {status === 'sent' && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                  className="flex items-center gap-2 text-emerald-400 text-sm"
+                >
+                  <CheckCircle size={15} /> Message sent!
+                </motion.span>
+              )}
+              {status === 'error' && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                  className="text-red-400 text-sm"
+                >
+                  Something went wrong — try emailing directly.
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.form>
 
         {/* Contact cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
