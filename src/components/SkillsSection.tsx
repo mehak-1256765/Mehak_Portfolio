@@ -3,6 +3,18 @@ import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ClipReveal, FlyUp, SlideRight, FadeIn } from './Animate'
 
 const SKILLS = {
+  'AI & ML': {
+    color: '#f472b6',
+    items: [
+      { name: 'Claude / Gemini API',  pct: 88 },
+      { name: 'Prompt Engineering',   pct: 85 },
+      { name: 'LangChain',            pct: 80 },
+      { name: 'FAISS / RAG',          pct: 78 },
+      { name: 'scikit-learn',         pct: 72 },
+      { name: 'Pandas / NumPy',       pct: 80 },
+      { name: 'n8n Automation',       pct: 82 },
+    ],
+  },
   Frontend: {
     color: '#a78bfa',
     items: [
@@ -13,29 +25,28 @@ const SKILLS = {
       { name: 'Tailwind CSS',  pct: 92 },
       { name: 'Three.js / 3D', pct: 75 },
       { name: 'Framer Motion', pct: 80 },
-      { name: 'HTML5 / CSS3',  pct: 95 },
     ],
   },
   Backend: {
     color: '#22d3ee',
     items: [
-      { name: 'Python',     pct: 78 },
-      { name: 'FastAPI',    pct: 75 },
+      { name: 'Python',     pct: 85 },
+      { name: 'FastAPI',    pct: 82 },
       { name: 'Node.js',    pct: 60 },
-      { name: 'REST APIs',  pct: 82 },
-      { name: 'Reflex.dev', pct: 65 },
+      { name: 'REST APIs',  pct: 85 },
+      { name: 'Docker',     pct: 70 },
+      { name: 'GCP Cloud Run', pct: 72 },
     ],
   },
-  'DevOps & Data': {
+  'Data & Tools': {
     color: '#fb923c',
     items: [
-      { name: 'n8n Automation', pct: 80 },
-      { name: 'Git / GitHub',   pct: 85 },
-      { name: 'Firebase',       pct: 72 },
+      { name: 'Git / GitHub',   pct: 88 },
+      { name: 'PostgreSQL',     pct: 70 },
       { name: 'MongoDB',        pct: 65 },
+      { name: 'Firebase',       pct: 72 },
+      { name: 'DuckDB / FAISS', pct: 75 },
       { name: 'MySQL',          pct: 68 },
-      // { name: 'Docker',         pct: 45 },
-      { name: 'Vite',           pct: 85 },
     ],
   },
 }
@@ -132,7 +143,7 @@ export default function SkillsSection() {
         </div>
 
         {/* Skill categories */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {Object.entries(SKILLS).map(([cat, { color, items }], ci) => (
             <SkillCategory key={cat} cat={cat} color={color} items={items} ci={ci} />
           ))}

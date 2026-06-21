@@ -1,40 +1,59 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, Lock, Heart, LucideIcon } from 'lucide-react'
+import { ArrowUpRight, Globe, Car, Sparkles, Zap, BarChart2, FlaskConical, Bot, ScanSearch, X, Play, Lock, Heart, Layers, TrendingUp, Building2, FileText, LucideIcon } from 'lucide-react'
 import { FlyUp, ClipReveal, FadeIn } from './Animate'
 
 const PROJECTS: {
   title: string; sub: string; icon: LucideIcon; color: string
   desc: string; tech: string[]; tags: string[]; url: string | null; video?: string
 }[] = [
-  { title: 'OneUp Hosting',    sub: 'Modern Hosting Website',    icon: Globe,        color: '#6366f1',
-    desc: 'Full frontend for a production hosting platform with domain search, 3D visuals, and animated checkout.',
-    tech: ['React.js','Three.js','Tailwind','Framer Motion'], tags: ['SEO 75→100%','Perf 70→90%','Freelance'], url: 'https://oneup-hosting.com/' },
-  { title: 'SpecArs',          sub: 'Car Modification Platform', icon: Car,          color: '#fb7185',
-    desc: 'Real-time Firebase inventory, config builder, and smooth UI animations for a car mod platform.',
-    tech: ['React.js','Firebase','Tailwind','Vite'], tags: ['Real-time DB','Custom Config','Freelance'], url: 'https://specarts.vercel.app/' },
-  { title: 'GALAXO',           sub: 'Galaxy Learning Web App',   icon: Sparkles,     color: '#22d3ee',
-    desc: 'Space ed-tech with animated 3D models, galaxy backgrounds, and educational content.',
-    tech: ['React.js','Three.js','GSAP','Tailwind'], tags: ['3D Models','Scroll Animations'], url: 'https://galaxo.vercel.app/' },
-  { title: 'Moqbilin',         sub: 'Wedding Matchmaking Platform', icon: Heart,       color: '#fb7185',
-    desc: 'Freelance frontend for a wedding matchmaking platform with clean UI, smooth UX, and responsive design built for a client.',
-    tech: ['React.js','Tailwind','Framer Motion','Vite'], tags: ['Freelance','Client Work'], url: 'https://www.moqbilin.com/' },
-  { title: 'AI Daily Digest',  sub: 'n8n Morning Briefing Bot',  icon: Bot,          color: '#f472b6',
+  // ── Production AI platforms (most impressive — shown first) ──
+  { title: 'Enterprise AI Platform', sub: 'Multi-Module Generative AI Portal', icon: Layers, color: '#c4b5fd',
+    desc: 'Multi-module AI portal spanning Text-to-SQL, document intelligence, auto-generated insights, and agentic sales automation — deployed on GCP Cloud Run with Docker.',
+    tech: ['Python','FastAPI','React','Claude API','Gemini','LangChain','FAISS','DuckDB','Docker','GCP'],
+    tags: ['4 AI Modules','GCP','Production'], url: null },
+  { title: 'Supply Chain AI', sub: 'AI Supplier Intelligence Platform', icon: TrendingUp, color: '#34d399',
+    desc: 'AI-powered supplier analytics platform delivering executive summaries, early-warning anomaly detection, KPI dashboards and live Q&A. GCS prompt caching cut AI costs by 90%.',
+    tech: ['Python','FastAPI','React','Claude API','GCS','Cloud Run','Recharts','Docker'],
+    tags: ['90% Cost Cut','Anomaly Detection','Production'], url: null },
+  { title: 'Real Estate AI', sub: 'Lead Scoring & Property Intelligence', icon: Building2, color: '#fb923c',
+    desc: 'Dual CRM + ERP analytics platform with RandomForest lead scoring and AI property matching using cosine similarity across 10 business dimensions.',
+    tech: ['Python','FastAPI','React','scikit-learn','Claude API','NumPy','Docker','GCP'],
+    tags: ['ML Model','AUC-Optimized','Production'], url: null },
+  // ── Personal AI projects ──
+  { title: 'MeetingMind',     sub: 'AI Meeting Summarizer',          icon: FileText,     color: '#60a5fa',
+    desc: 'Human-in-the-loop app: paste a meeting transcript → AI extracts action items, owners, and priorities → user reviews and edits → one-click follow-up email to the team.',
+    tech: ['Next.js','Gemini API','Mistral API','Resend','n8n'], tags: ['Human-in-Loop','AI Agent'], url: null },
+  { title: 'AI Daily Digest',  sub: 'n8n Morning Briefing Bot',       icon: Bot,          color: '#f472b6',
     desc: 'Automated 7 AM email digest with unread Gmail, AI-summarised news, calendar events and daily tips. One email. Everything you need.',
     tech: ['n8n','Mistral AI','Gmail API','Google Calendar','RSS'], tags: ['< $0.01/day','7AM Autopilot'],
     url: null, video: '/ai-digest-automation.mp4' },
-  { title: 'Sales Automation', sub: 'n8n Workflow Engine',       icon: Zap,          color: '#fb923c',
+  // ── Internship projects ──
+  { title: 'Retail Analytics', sub: 'Multi-Tenant POS Data Platform',  icon: BarChart2,    color: '#4ade80',
+    desc: 'Multi-tenant SaaS where each customer gets isolated GCS buckets. POS sales data flows through a GCS → Pub/Sub → Cloud Run pipeline — delivering KPI dashboards, product mix analysis, weekly patterns, festival demand, dead stock detection, and automated reorder recommendations.',
+    tech: ['React.js','Flask','Python','Pandas','GCS','Pub/Sub','Cloud Run','Recharts'], tags: ['Multi-Tenant','Data Pipeline','Multi-Store'], url: null },
+  { title: 'ML Feature Engineering', sub: 'ML Data Pipeline',         icon: FlaskConical, color: '#fbbf24',
+    desc: 'ML preprocessing pipelines using optimal feature binning techniques, interactive binning visualisations and scorecards for supervised discretisation.',
+    tech: ['Python','FastAPI','React.js','Pandas'], tags: ['ML Pipeline','Scorecards'], url: null },
+  { title: 'Sales Automation', sub: 'n8n Workflow Engine',            icon: Zap,          color: '#f97316',
     desc: 'End-to-end salesperson automation with email outreach, risk alerts, and AI-powered insights.',
     tech: ['n8n','REST APIs','AI/LLM Nodes','Email'], tags: ['60% Less Manual','AI Insights'], url: null },
-  { title: 'Retail Analytics', sub: 'Decision-Support Platform', icon: BarChart2,    color: '#34d399',
-    desc: 'Inventory tracking, sales forecasting and segmentation with automated recommendations.',
-    tech: ['React.js','Python','FastAPI'], tags: ['Auto Recs','Festival Alerts'], url: null },
-  { title: 'OptBinning',       sub: 'ML Data Engineering',       icon: FlaskConical, color: '#fbbf24',
-    desc: 'ML pipelines with OptBinning integration, interactive binning visualisations and scorecards.',
-    tech: ['Python','FastAPI','React.js','Pandas'], tags: ['ML Pipeline','Scorecards'], url: null },
-  { title: 'Data Extraction',  sub: 'Document Extraction Tool',  icon: ScanSearch,   color: '#818cf8',
+  { title: 'Data Extraction',  sub: 'Document Extraction Tool',       icon: ScanSearch,   color: '#818cf8',
     desc: 'Enhanced an existing document extraction tool to support multiple project types, improving flexibility and accuracy across different use cases.',
     tech: ['Python','FastAPI','LLMs','Pandas'], tags: ['Multi-Project','Enhanced'], url: null },
+  // ── Freelance frontend ──
+  { title: 'OneUp Hosting',    sub: 'Modern Hosting Website',         icon: Globe,        color: '#6366f1',
+    desc: 'Full frontend for a production hosting platform with domain search, 3D visuals, and animated checkout.',
+    tech: ['React.js','Three.js','Tailwind','Framer Motion'], tags: ['SEO 75→100%','Perf 70→90%','Freelance'], url: 'https://oneup-hosting.com/' },
+  { title: 'SpecArs',          sub: 'Car Modification Platform',      icon: Car,          color: '#fb7185',
+    desc: 'Real-time Firebase inventory, config builder, and smooth UI animations for a car mod platform.',
+    tech: ['React.js','Firebase','Tailwind','Vite'], tags: ['Real-time DB','Custom Config','Freelance'], url: 'https://specarts.vercel.app/' },
+  { title: 'GALAXO',           sub: 'Galaxy Learning Web App',        icon: Sparkles,     color: '#22d3ee',
+    desc: 'Space ed-tech with animated 3D models, galaxy backgrounds, and educational content.',
+    tech: ['React.js','Three.js','GSAP','Tailwind'], tags: ['3D Models','Scroll Animations'], url: 'https://galaxo.vercel.app/' },
+  { title: 'Moqbilin',         sub: 'Wedding Matchmaking Platform',   icon: Heart,        color: '#f472b6',
+    desc: 'Freelance frontend for a wedding matchmaking platform with clean UI, smooth UX, and responsive design.',
+    tech: ['React.js','Tailwind','Framer Motion','Vite'], tags: ['Freelance','Client Work'], url: 'https://www.moqbilin.com/' },
 ]
 
 /* ── Video lightbox ── */
@@ -294,7 +313,7 @@ export default function ProjectsSection() {
           <ClipReveal delay={0.1}>
             <h2 className="serif text-white tracking-tight leading-none"
               style={{ fontSize: 'clamp(2.8rem,8vw,6rem)' }}>
-              Projects <em className="italic text-white/30 text-[0.5em]">— 9 shipped</em>
+              Projects <em className="italic text-white/30 text-[0.5em]">— 13 shipped</em>
             </h2>
           </ClipReveal>
         </div>

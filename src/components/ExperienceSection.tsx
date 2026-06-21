@@ -24,14 +24,14 @@ const EXPERIENCES = [
     company: 'dSights AI',
     badge: 'INTERNSHIP',
     promoted: false,
-    period: 'Nov 2025 – 2026',
+    period: 'Nov 2025 – Mar 2026',
     loc: 'Bengaluru, India',
     color: '#a78bfa',
     points: [
       'Built 15+ reusable React components — reduced dev time by 30%',
       'Integrated ML pipelines and REST APIs for real-time enterprise analytics',
-      'Developed Retail Analytics Platform with automated inventory recommendations',
-      'Integrated OptBinning models with interactive binning visualisations & scorecards',
+      'Built multi-tenant retail analytics SaaS with GCS → Pub/Sub → Cloud Run data pipeline — KPI dashboards, product mix, festival demand, dead stock detection, and reorder recommendations',
+      'Built ML preprocessing pipelines using optimal feature binning techniques with interactive visualisations & scorecards',
     ],
   },
   {

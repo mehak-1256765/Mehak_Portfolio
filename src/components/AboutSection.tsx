@@ -133,7 +133,7 @@ function ScaleInVideo({ imgY, inView }: { imgY: any; inView: boolean }) {
         transition={{ duration: 0.6, delay: 0.6 }}
         className="absolute bottom-6 left-6 right-6 flex gap-3"
       >
-        {[{ value: '15+', label: 'Components Built' }, { value: '30%', label: 'Dev Time Saved' }].map(s => (
+        {[{ value: '90%', label: 'AI Cost Reduction' }, { value: '60%', label: 'Manual Effort Saved' }].map(s => (
           <div key={s.label} className="liquid-glass rounded-2xl px-4 py-3 flex-1 text-center">
             <p className="text-white text-xl font-semibold serif">{s.value}</p>
             <p className="text-white/55 text-[10px] tracking-wide">{s.label}</p>
